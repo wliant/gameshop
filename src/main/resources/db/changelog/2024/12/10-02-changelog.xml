@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1733841926216-1" author="tanwe">
+        <createTable tableName="file_import">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_fileimport"/>
+            </column>
+            <column name="creation_time" type="TIMESTAMP(3)"/>
+            <column name="updated_time" type="TIMESTAMP(3)"/>
+            <column name="file_metadata" type="VARCHAR(255)"/>
+            <column name="process_count" type="INT"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1733841926216-2" author="tanwe">
+        <createTable tableName="game_sale_aggregate">
+            <column name="date_of_sale" type="DATE">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_gamesaleaggregate"/>
+            </column>
+            <column name="sale_count" type="BIGINT"/>
+            <column name="sale_sum" type="DECIMAL(19, 2)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1733841926216-3" author="tanwe">
+        <createTable tableName="game_sale_game_no_aggregate">
+            <column name="date_of_sale" type="DATE">
+                <constraints primaryKey="true" primaryKeyName="pk_gamesalegamenoaggregate"/>
+            </column>
+            <column name="game_no" type="INT">
+                <constraints primaryKey="true" primaryKeyName="pk_gamesalegamenoaggregate"/>
+            </column>
+            <column name="sale_count" type="BIGINT"/>
+            <column name="sale_sum" type="DECIMAL(19, 2)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1733841926216-4" author="tanwe">
+        <createTable tableName="game_sales">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_game_sales"/>
+            </column>
+            <column name="game_no" type="INT"/>
+            <column name="game_name" type="VARCHAR(20)"/>
+            <column name="game_code" type="VARCHAR(5)"/>
+            <column name="type" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost_price" type="DECIMAL(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax" type="DECIMAL(3, 2)"/>
+            <column name="sale_price" type="DECIMAL(5, 2)"/>
+            <column name="date_of_sale" type="TIMESTAMP(3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1733841926216-5" author="tanwe">
+        <createTable tableName="game_sales_staging">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_game_sales_staging"/>
+            </column>
+            <column name="game_no" type="INT"/>
+            <column name="game_name" type="VARCHAR(20)"/>
+            <column name="game_code" type="VARCHAR(5)"/>
+            <column name="type" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost_price" type="DECIMAL(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax" type="DECIMAL(3, 2)"/>
+            <column name="sale_price" type="DECIMAL(5, 2)"/>
+            <column name="date_of_sale" type="TIMESTAMP(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_import_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1733841926216-6" author="tanwe">
+        <createIndex indexName="idx_date_of_sale" tableName="game_sales">
+            <column name="date_of_sale"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1733841926216-7" author="tanwe">
+        <createIndex indexName="idx_sale_price" tableName="game_sales">
+            <column name="sale_price"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1733841926216-8" author="tanwe">
+        <addForeignKeyConstraint baseColumnNames="file_import_id" baseTableName="game_sales_staging"
+                                 constraintName="FK_GAME_SALES_STAGING_ON_FILE_IMPORT" referencedColumnNames="id"
+                                 referencedTableName="file_import"/>
+    </changeSet>
+
+</databaseChangeLog>
